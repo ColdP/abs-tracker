@@ -3,105 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>腹肌训练追踪 - 状态</title>
-    <!-- Tailwind CSS -->
+    <title>腹肌训练追踪 - 主页</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Manrope -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
-    <!-- Google Fonts Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <style>
-        /* 自定义 Material 3 Expressive 风格 */
         body {
-            font-family: 'Manrope', sans-serif;
-            background-color: #f3f4f6; /* 浅灰色背景 */
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f0f4ff; /* 淡蓝色背景 */
         }
-        .m3-surface {
+        .m3-expressive-card {
             background-color: #ffffff;
-            border-radius: 1.75rem; /* 更大的圆角 */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-radius: 1.5rem; /* 24px */
+            padding: 1.5rem; /* 24px */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
         }
-        .m3-primary-text {
-            color: #005ac1; /* 主题蓝色 */
+        .m3-expressive-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
-        .m3-primary-bg {
-            background-color: #d8e2ff; /* 浅蓝色背景 */
+        .progress-bar-bg {
+            background-color: #e0e7ff; /* 进度条背景色 */
+            border-radius: 9999px;
+            overflow: hidden;
         }
-        .m3-primary-fill {
-            background-color: #005ac1;
+        .progress-bar-fill {
+            background-color: #4f46e5; /* 主题蓝色 */
+            transition: width 0.5s ease-in-out;
+            border-radius: 9999px;
         }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
         }
         .calendar-day {
-            width: 36px;
-            height: 36px;
-        }
-        .calendar-day.completed {
-            background-color: #d8e2ff;
-            color: #005ac1;
-            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 2.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
         }
         .calendar-day.today {
-            border: 2px solid #005ac1;
+            background-color: #4f46e5;
+            color: white;
+        }
+        .calendar-day.completed {
+            background-color: #a5b4fc;
+            color: #312e81;
+        }
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: background-color 0.2s;
+            font-weight: 700;
+        }
+        .nav-link.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .nav-link:not(.active):hover {
+            background-color: #e0e7ff;
         }
     </style>
 </head>
-<body class="bg-blue-50 text-gray-800">
+<body class="antialiased text-slate-800">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
-        
-        <!-- Header -->
+    <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- 头部和导航 -->
         <header class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-4xl font-extrabold m3-primary-text">腹肌挑战</h1>
-                <p class="text-gray-500 mt-1">坚持就是胜利！</p>
-            </div>
-            <nav class="flex gap-2">
-                <a href="./index.html" class="px-4 py-2 m3-primary-bg text-blue-800 font-bold rounded-full">状态</a>
-                <a href="./tracker.html" class="px-4 py-2 hover:bg-blue-100 rounded-full">记录</a>
-                <a href="./blog.html" class="px-4 py-2 hover:bg-blue-100 rounded-full">博客</a>
+            <h1 class="text-3xl font-bold text-indigo-800">腹肌挑战</h1>
+            <nav class="flex items-center space-x-2 bg-white p-2 rounded-full shadow-sm">
+                <a href="./index.html" class="nav-link active">主页</a>
+                <a href="./tracker.html" class="nav-link">开始训练</a>
+                <a href="./blog.html" class="nav-link">博客墙</a>
             </nav>
         </header>
 
-        <main class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Left Column: Calendar -->
-            <div class="md:col-span-1">
-                <div class="m3-surface p-6">
-                    <h2 class="text-2xl font-bold mb-4 text-gray-700">健身日历</h2>
-                    <div id="calendar" class="grid grid-cols-7 gap-2 place-items-center text-center">
-                        <!-- Calendar will be generated by JS -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- 左侧：今日状态和日历 -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- 今日训练进度 -->
+                <section id="today-progress" class="m3-expressive-card">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="material-symbols-outlined mr-2 text-indigo-600">fitness_center</span>
+                        今日训练进度 (<span id="current-date"></span>)
+                    </h2>
+                    <div id="loading-progress" class="text-center text-gray-500">加载数据中...</div>
+                    <div id="no-data-today" class="hidden text-center text-gray-500">今天还没有训练记录哦，快去<a href="./tracker.html" class="text-indigo-600 font-bold">开始训练</a>吧！</div>
+                    <div id="workout-list" class="space-y-4">
+                        <!-- 训练项目将由JS动态生成 -->
                     </div>
-                </div>
+                </section>
+
+                <!-- 日历 -->
+                <section class="m3-expressive-card">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="material-symbols-outlined mr-2 text-indigo-600">calendar_month</span>
+                        训练日历
+                    </h2>
+                    <div id="calendar-container">
+                        <!-- 日历将由JS动态生成 -->
+                    </div>
+                </section>
             </div>
 
-            <!-- Right Column: Today's Progress -->
-            <div class="md:col-span-2">
-                <div class="m3-surface p-6">
-                    <h2 class="text-2xl font-bold mb-1 text-gray-700">今日进度</h2>
-                    <p id="today-date" class="text-gray-500 mb-6"></p>
-                    <div id="progress-container" class="space-y-5">
-                        <!-- Progress items will be generated by JS -->
-                        <p id="loading-message" class="text-gray-500">正在从 Firebase 加载数据...</p>
+            <!-- 右侧：最新博客 -->
+            <div class="lg:col-span-1">
+                <section id="latest-blog" class="m3-expressive-card">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="material-symbols-outlined mr-2 text-indigo-600">article</span>
+                        最新分享
+                    </h2>
+                    <div id="loading-blog" class="text-center text-gray-500">加载博客中...</div>
+                     <div id="no-blog-post" class="hidden text-center text-gray-500">还没有任何分享。</div>
+                    <div id="blog-content" class="hidden space-y-4">
+                        <img id="blog-image" src="" alt="每日分享图片" class="w-full h-auto rounded-xl object-cover">
+                        <p id="blog-text" class="text-gray-700 whitespace-pre-wrap"></p>
+                        <a href="./blog.html" class="text-indigo-600 font-bold hover:underline">查看所有分享 &rarr;</a>
                     </div>
-                </div>
+                </section>
             </div>
         </main>
-
-        <footer class="text-center text-gray-400 mt-12">
-            <p>&copy; 2024 腹肌训练追踪器. 为更好的自己加油.</p>
-        </footer>
     </div>
 
-    <!-- Firebase SDKs -->
     <script type="module">
+        // 导入Firebase模块
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy, limit, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // 你的 Firebase 项目配置
+        // 你的Firebase配置
         const firebaseConfig = {
             apiKey: "AIzaSyC7XJuqUZrNbnuWZMIn3XBBctIYDwsZ4kE",
             authDomain: "my-abs-tracker-0.firebaseapp.com",
@@ -112,130 +146,164 @@
             measurementId: "G-KWTCEWNW1Q"
         };
 
-        // 初始化 Firebase
+        // 初始化Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'my-abs-tracker-0';
 
         // 训练项目定义
-        const exercises = {
-            'plank': { name: '平板支撑', totalSets: 4, unit: '分钟', reps: 1, icon: 'exercise' },
-            'crunches': { name: '摸膝卷腹', totalSets: 4, unit: '次', reps: 20, icon: 'fitness_center' },
-            'bicycle': { name: '仰卧蹬车', totalSets: 4, unit: '次', reps: 20, icon: 'directions_bike' },
-            'twists': { name: '俄罗斯转体', totalSets: 4, unit: '次', reps: 18, icon: 'sync_alt' },
-            'stretch': { name: '腹肌拉伸', totalSets: 1, unit: '秒', reps: 60, icon: 'self_improvement' }
-        };
+        const workouts = [
+            { id: 'plank', name: '平板支撑', totalSets: 4, unit: '分钟', reps: 1 },
+            { id: 'crunches', name: '摸膝卷腹', totalSets: 4, unit: '次', reps: 20 },
+            { id: 'cycling', name: '仰卧蹬车', totalSets: 4, unit: '次', reps: 20 },
+            { id: 'twists', name: '俄罗斯转体', totalSets: 4, unit: '次', reps: 18 },
+            { id: 'stretch', name: '腹肌拉伸', totalSets: 1, unit: '秒', reps: 60 }
+        ];
 
         // 获取今天的日期字符串 YYYY-MM-DD
-        function getTodayString() {
+        function getTodayDateString() {
             const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            return `${yyyy}-${mm}-${dd}`;
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
 
-        // 渲染进度条
-        function renderProgress(logData = {}) {
-            const container = document.getElementById('progress-container');
-            container.innerHTML = ''; // 清空加载信息
-            
-            if (Object.keys(logData).length === 0) {
-                 container.innerHTML = `<p class="text-gray-500 text-center py-8">今天还没有训练记录哦，快去<a href="./tracker.html" class="m3-primary-text font-bold">记录</a>吧！</p>`;
-                 return;
-            }
+        // 渲染训练项目列表
+        function renderWorkouts(data) {
+            const workoutListEl = document.getElementById('workout-list');
+            workoutListEl.innerHTML = ''; // 清空
 
-            for (const key in exercises) {
-                const exercise = exercises[key];
-                const completedSets = logData.exercises?.[key] || 0;
-                const percentage = Math.round((completedSets / exercise.totalSets) * 100);
+            workouts.forEach(workout => {
+                const completedSets = data?.setsCompleted?.[workout.id] || 0;
+                const percentage = Math.round((completedSets / workout.totalSets) * 100);
 
-                // **FIX: Added flex, items-center, justify-center to center the icon**
-                const progressItem = `
-                    <div class="flex items-center gap-4">
-                        <div class="p-3 m3-primary-bg rounded-full flex items-center justify-center">
-                            <span class="material-symbols-outlined m3-primary-text">${exercise.icon}</span>
+                const itemHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-semibold">${workout.name}</span>
+                            <span class="text-sm text-gray-600">${completedSets} / ${workout.totalSets} 组</span>
                         </div>
-                        <div class="flex-grow">
-                            <div class="flex justify-between items-baseline">
-                                <p class="font-bold text-gray-700">${exercise.name}</p>
-                                <p class="text-sm text-gray-500">${completedSets} / ${exercise.totalSets} 组</p>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                                <div class="m3-primary-fill h-2.5 rounded-full" style="width: ${percentage}%"></div>
-                            </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill h-2" style="width: ${percentage}%;"></div>
                         </div>
-                        <div class="w-12 text-right font-bold m3-primary-text">${percentage}%</div>
                     </div>
                 `;
-                container.innerHTML += progressItem;
+                workoutListEl.innerHTML += itemHTML;
+            });
+        }
+
+        // 加载今日训练数据
+        async function loadTodayProgress() {
+            const dateStr = getTodayDateString();
+            document.getElementById('current-date').textContent = dateStr;
+            
+            const docRef = doc(db, "workouts", dateStr);
+            const docSnap = await getDoc(docRef);
+
+            document.getElementById('loading-progress').classList.add('hidden');
+
+            if (docSnap.exists()) {
+                document.getElementById('workout-list').classList.remove('hidden');
+                renderWorkouts(docSnap.data());
+            } else {
+                document.getElementById('no-data-today').classList.remove('hidden');
+                renderWorkouts(null); // 渲染一个空状态
+            }
+        }
+
+        // 加载最新博客
+        async function loadLatestBlog() {
+            const q = query(collection(db, "blogPosts"), orderBy("timestamp", "desc"), limit(1));
+            const querySnapshot = await getDocs(q);
+
+            document.getElementById('loading-blog').classList.add('hidden');
+            const blogContentEl = document.getElementById('blog-content');
+
+            if (!querySnapshot.empty) {
+                const latestPost = querySnapshot.docs[0].data();
+                document.getElementById('blog-image').src = latestPost.imageBase64;
+                document.getElementById('blog-text').textContent = latestPost.text;
+                blogContentEl.classList.remove('hidden');
+            } else {
+                 document.getElementById('no-blog-post').classList.remove('hidden');
             }
         }
 
         // 渲染日历
-        function renderCalendar(completedDates) {
-            const calendarEl = document.getElementById('calendar');
-            calendarEl.innerHTML = ''; // 清空
+        async function renderCalendar() {
+            const container = document.getElementById('calendar-container');
             const today = new Date();
-            const month = today.getMonth();
             const year = today.getFullYear();
-            const todayStr = getTodayString();
+            const month = today.getMonth();
+            const todayDate = today.getDate();
 
-            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            // 获取当月所有训练记录
+            const completedDays = new Set();
+            const monthStr = String(month + 1).padStart(2, '0');
+            const firstDayOfMonth = `${year}-${monthStr}-01`;
+            // Get the last day of the month by getting the 0th day of the next month
+            const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+            const lastDayOfMonthStr = `${year}-${monthStr}-${String(lastDayOfMonth).padStart(2, '0')}`;
+
+            const q = query(collection(db, "workouts"), 
+                where("date", ">=", firstDayOfMonth), 
+                where("date", "<=", lastDayOfMonthStr)
+            );
+            try {
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const totalSets = workouts.reduce((sum, w) => sum + w.totalSets, 0);
+                    const completedSets = Object.values(data.setsCompleted || {}).reduce((sum, s) => sum + s, 0);
+                    if (completedSets >= totalSets) {
+                        completedDays.add(parseInt(doc.id.split('-')[2]));
+                    }
+                });
+            } catch(e) {
+                // In a real app, you might need to create a composite index in Firebase.
+                // For this example, we'll catch the error and log it.
+                // The calendar will still render, just without completion marks.
+                console.warn("Could not fetch workout completion data for calendar. You might need to create a Firebase index:", e.message);
+            }
+
+
+            const firstDayOfWeek = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-            // 添加星期标题
-            ['日', '一', '二', '三', '四', '五', '六'].forEach(day => {
-                calendarEl.innerHTML += `<div class="font-bold text-gray-500 text-sm">${day}</div>`;
-            });
+            let calendarHTML = `
+                <div class="calendar-grid text-center font-bold text-gray-500 mb-2">
+                    <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+                </div>
+                <div class="calendar-grid">
+            `;
 
-            // 添加空白天
-            for (let i = 0; i < firstDayOfMonth; i++) {
-                calendarEl.innerHTML += `<div></div>`;
+            // 空白天
+            for (let i = 0; i < firstDayOfWeek; i++) {
+                calendarHTML += `<div></div>`;
             }
 
-            // 添加日期
-            for (let i = 1; i <= daysInMonth; i++) {
-                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-                // **FIX: Added flex, items-center, justify-center to center the numbers**
-                let classes = 'calendar-day rounded-full cursor-default flex items-center justify-center';
-                if (completedDates.has(dateStr)) {
+            // 日期
+            for (let day = 1; day <= daysInMonth; day++) {
+                let classes = 'calendar-day';
+                if (day === todayDate) {
+                    classes += ' today';
+                } else if (completedDays.has(day)) {
                     classes += ' completed';
                 }
-                if (dateStr === todayStr) {
-                    classes += ' today';
-                }
-                calendarEl.innerHTML += `<div class="${classes}">${i}</div>`;
+                calendarHTML += `<div class="${classes}">${day}</div>`;
             }
+
+            calendarHTML += `</div>`;
+            container.innerHTML = calendarHTML;
         }
 
-        // 主函数
-        async function main() {
-            document.getElementById('today-date').textContent = new Date().toLocaleDateString('zh-CN', { dateStyle: 'long' });
-            
-            try {
-                const logsCollection = collection(db, `artifacts/${appId}/public/data/workout_logs`);
-                const querySnapshot = await getDocs(logsCollection);
-                
-                const logs = {};
-                const completedDates = new Set();
-                querySnapshot.forEach(doc => {
-                    logs[doc.id] = doc.data();
-                    completedDates.add(doc.id);
-                });
-
-                const todayStr = getTodayString();
-                renderProgress(logs[todayStr]);
-                renderCalendar(completedDates);
-
-            } catch (error) {
-                console.error("加载 Firebase 数据失败:", error);
-                document.getElementById('progress-container').innerHTML = '<p class="text-red-500">加载数据失败，请检查 Firebase 配置或网络连接。</p>';
-            }
-        }
 
         // 页面加载时执行
-        window.onload = main;
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTodayProgress();
+            loadLatestBlog();
+            renderCalendar();
+        });
     </script>
 </body>
 </html>

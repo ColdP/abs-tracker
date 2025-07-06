@@ -3,120 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>腹肌训练追踪 - 记录</title>
-    <!-- Tailwind CSS -->
+    <title>腹肌训练追踪 - 开始训练</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Manrope -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
-    <!-- Google Fonts Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Manrope', sans-serif; }
-        .m3-surface { background-color: #ffffff; border-radius: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .m3-primary-text { color: #005ac1; }
-        .m3-primary-bg { background-color: #d8e2ff; }
-        .m3-primary-fill { background-color: #005ac1; }
-        .m3-button {
-            background-color: #005ac1;
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f0f4ff;
+        }
+        .m3-expressive-card {
+            background-color: #ffffff;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .set-btn {
+            width: 3rem;
+            height: 3rem;
+            border: 2px solid #c7d2fe;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            color: #4338ca;
+        }
+        .set-btn:hover {
+            background-color: #e0e7ff;
+        }
+        .set-btn.completed {
+            background-color: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+        .progress-bar-bg {
+            background-color: #e0e7ff;
+            border-radius: 9999px;
+            overflow: hidden;
+            height: 1.5rem;
+        }
+        .progress-bar-fill {
+            background-color: #4f46e5;
+            transition: width 0.5s ease-in-out;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
             font-weight: bold;
-            border-radius: 999px;
+        }
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: background-color 0.2s;
+            font-weight: 700;
+        }
+        .nav-link.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .nav-link:not(.active):hover {
+            background-color: #e0e7ff;
+        }
+        .submit-btn {
+            background-color: #4f46e5;
+            color: white;
             padding: 0.75rem 1.5rem;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            cursor: pointer;
         }
-        .m3-button:hover { background-color: #004a9b; box-shadow: 0 2px 8px rgba(0, 90, 193, 0.3); }
-        .m3-button:disabled { background-color: #a5a5a5; cursor: not-allowed; }
-        .set-button {
-            width: 48px; height: 48px; border-radius: 50%;
-            border: 2px solid #b0c4ff; color: #b0c4ff;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; transition: all 0.2s ease;
+        .submit-btn:hover {
+            background-color: #4338ca;
         }
-        .set-button.completed { background-color: #005ac1; color: white; border-color: #005ac1; }
-        .password-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 999; backdrop-filter: blur(5px);
+        .submit-btn:disabled {
+            background-color: #a5b4fc;
+            cursor: not-allowed;
         }
     </style>
 </head>
-<body class="bg-blue-50 text-gray-800">
+<body class="antialiased text-slate-800">
 
-    <!-- Password Modal -->
-    <div id="password-modal" class="password-modal">
-        <div class="m3-surface p-8 rounded-3xl w-11/12 max-w-sm text-center">
-            <h2 class="text-2xl font-bold mb-4">请输入密码</h2>
-            <p class="text-gray-500 mb-6">此页面受密码保护。</p>
-            <input type="password" id="password-input" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-            <p id="password-error" class="text-red-500 h-5 mt-2 text-sm"></p>
-            <button id="password-submit" class="m3-button w-full justify-center mt-4">进入</button>
+    <!-- 密码输入遮罩 -->
+    <div id="password-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex justify-center items-center z-50">
+        <div class="bg-white p-8 rounded-2xl shadow-xl text-center w-11/12 max-w-sm">
+            <h2 class="text-2xl font-bold mb-4">请输入访问密码</h2>
+            <p class="text-gray-600 mb-6">此页面仅供自己记录使用</p>
+            <input type="password" id="password-input" class="w-full p-3 border-2 border-gray-300 rounded-lg text-center focus:border-indigo-500 focus:ring-indigo-500" placeholder="********">
+            <button id="password-submit" class="w-full mt-4 submit-btn">进入</button>
+            <p id="password-error" class="text-red-500 mt-2 h-4"></p>
         </div>
     </div>
 
-    <div id="app-content" class="container mx-auto p-4 md:p-8 max-w-4xl hidden">
-        <!-- Header -->
+    <!-- 主内容 -->
+    <div id="main-content" class="hidden max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- 头部和导航 -->
         <header class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-4xl font-extrabold m3-primary-text">记录今日训练</h1>
-                <p id="today-date" class="text-gray-500 mt-1"></p>
-            </div>
-             <nav class="flex gap-2">
-                <a href="./index.html" class="px-4 py-2 hover:bg-blue-100 rounded-full">状态</a>
-                <a href="./tracker.html" class="px-4 py-2 m3-primary-bg text-blue-800 font-bold rounded-full">记录</a>
-                <a href="./blog.html" class="px-4 py-2 hover:bg-blue-100 rounded-full">博客</a>
+            <h1 class="text-3xl font-bold text-indigo-800">开始训练</h1>
+            <nav class="flex items-center space-x-2 bg-white p-2 rounded-full shadow-sm">
+                <a href="./index.html" class="nav-link">主页</a>
+                <a href="./tracker.html" class="nav-link active">开始训练</a>
+                <a href="./blog.html" class="nav-link">博客墙</a>
             </nav>
         </header>
 
         <main class="space-y-8">
-            <!-- Exercises Tracker -->
-            <div class="m3-surface p-6">
-                <h2 class="text-2xl font-bold mb-6 text-gray-700">训练项目</h2>
-                <div id="exercise-list" class="space-y-6">
-                    <!-- JS will generate exercises here -->
+            <!-- 训练项目 -->
+            <section class="m3-expressive-card">
+                <h2 class="text-xl font-bold mb-2">训练清单</h2>
+                <p class="text-gray-500 mb-6">每完成一组，就点击对应的数字按钮。</p>
+                <div id="tracker-list" class="space-y-6">
+                    <!-- 追踪器将由JS动态生成 -->
                 </div>
-            </div>
+                <div class="mt-8">
+                    <h3 class="font-bold text-lg mb-2">总进度</h3>
+                    <div class="progress-bar-bg">
+                        <div id="total-progress-bar" class="progress-bar-fill h-full">0%</div>
+                    </div>
+                </div>
+            </section>
 
-            <!-- Daily Log -->
-            <div class="m3-surface p-6">
-                <h2 class="text-2xl font-bold mb-6 text-gray-700">每日记录</h2>
+            <!-- 每日分享 -->
+            <section class="m3-expressive-card">
+                <h2 class="text-xl font-bold mb-4">每日分享</h2>
                 <div class="space-y-4">
                     <div>
-                        <label for="photo-upload" class="font-bold text-gray-600">上传今日照片</label>
-                        <input type="file" id="photo-upload" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
-                        <img id="image-preview" src="" class="mt-4 rounded-xl max-h-60 hidden" alt="图片预览"/>
+                        <label for="photo-upload" class="font-semibold block mb-2">上传今日照片</label>
+                        <input type="file" id="photo-upload" accept="image/*" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"/>
+                        <img id="image-preview" src="" class="hidden mt-4 w-48 h-48 object-cover rounded-lg"/>
                     </div>
                     <div>
-                        <label for="notes" class="font-bold text-gray-600">今日感想</label>
-                        <textarea id="notes" rows="4" class="mt-1 w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" placeholder="记录一下今天的感受，或者任何想说的话..."></textarea>
+                        <label for="text-entry" class="font-semibold block mb-2">记录今天的心情或想法</label>
+                        <textarea id="text-entry" rows="4" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="今天感觉棒极了！"></textarea>
                     </div>
+                    <button id="save-all-button" class="submit-btn">
+                        <span id="btn-text">保存今日所有记录</span>
+                        <span id="btn-spinner" class="hidden animate-spin">&#9696;</span>
+                    </button>
+                    <p id="save-status" class="text-green-600 font-bold mt-2 h-4"></p>
                 </div>
-            </div>
-            
-            <!-- Save Button -->
-            <div class="text-center">
-                 <button id="save-progress" class="m3-button text-lg px-8 py-4">
-                    <span class="material-symbols-outlined">save</span>
-                    保存今日所有进度
-                </button>
-                <p id="save-status" class="mt-4 h-6 text-green-600 font-bold"></p>
-            </div>
+            </section>
         </main>
     </div>
 
-    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+        import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Config
+        // Firebase配置
         const firebaseConfig = {
             apiKey: "AIzaSyC7XJuqUZrNbnuWZMIn3XBBctIYDwsZ4kE",
             authDomain: "my-abs-tracker-0.firebaseapp.com",
@@ -126,207 +165,227 @@
             appId: "1:799705014883:web:3d340de1088848cb3f8e56",
             measurementId: "G-KWTCEWNW1Q"
         };
-        
-        // Init Firebase
+
+        // 初始化Firebase
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getFirestore(app);
-        const storage = getStorage(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'my-abs-tracker-0';
 
-        let userId = null;
-        let todayLog = { exercises: {} };
+        // 训练项目定义
+        const workouts = [
+            { id: 'plank', name: '平板支撑', totalSets: 4, unit: '分钟', reps: 1 },
+            { id: 'crunches', name: '摸膝卷腹', totalSets: 4, unit: '次', reps: 20 },
+            { id: 'cycling', name: '仰卧蹬车', totalSets: 4, unit: '次', reps: 20 },
+            { id: 'twists', name: '俄罗斯转体', totalSets: 4, unit: '次', reps: 18 },
+            { id: 'stretch', name: '腹肌拉伸', totalSets: 1, unit: '秒', reps: 60 }
+        ];
+        
+        let workoutState = {}; // 用于存储当前训练状态
+        let imageBase64 = null; // 用于存储图片base64编码
 
-        // Exercises Definition
-        const exercises = {
-            'plank': { name: '平板支撑', totalSets: 4, unit: '分钟', reps: 1, icon: 'exercise' },
-            'crunches': { name: '摸膝卷腹', totalSets: 4, unit: '次', reps: 20, icon: 'fitness_center' },
-            'bicycle': { name: '仰卧蹬车', totalSets: 4, unit: '次', reps: 20, icon: 'directions_bike' },
-            'twists': { name: '俄罗斯转体', totalSets: 4, unit: '次', reps: 18, icon: 'sync_alt' },
-            'stretch': { name: '腹肌拉伸', totalSets: 1, unit: '秒', reps: 60, icon: 'self_improvement' }
-        };
-
-        // Get today's date string YYYY-MM-DD
-        function getTodayString() {
+        // 获取今天的日期字符串 YYYY-MM-DD
+        function getTodayDateString() {
             const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            return `${yyyy}-${mm}-${dd}`;
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
 
-        // Render exercise list
-        function renderExercises() {
-            const container = document.getElementById('exercise-list');
-            container.innerHTML = '';
-            for (const key in exercises) {
-                const ex = exercises[key];
-                const completedSets = todayLog.exercises[key] || 0;
-                
-                let setButtons = '';
-                for(let i = 1; i <= ex.totalSets; i++) {
-                    setButtons += `<button class="set-button ${i <= completedSets ? 'completed' : ''}" data-exercise="${key}" data-set="${i}">${i}</button>`;
+        // 渲染训练追踪器
+        function renderTracker(data) {
+            const trackerListEl = document.getElementById('tracker-list');
+            trackerListEl.innerHTML = '';
+            
+            // 初始化状态
+            workoutState = data?.setsCompleted || {};
+            workouts.forEach(w => {
+                if (!workoutState[w.id]) {
+                    workoutState[w.id] = 0;
+                }
+            });
+
+            workouts.forEach(workout => {
+                let setButtonsHTML = '';
+                for (let i = 1; i <= workout.totalSets; i++) {
+                    const isCompleted = i <= (workoutState[workout.id] || 0);
+                    setButtonsHTML += `<button class="set-btn ${isCompleted ? 'completed' : ''}" data-workout-id="${workout.id}" data-set-num="${i}">${i}</button>`;
                 }
 
-                const item = `
-                    <div class="flex items-center gap-4 p-4 bg-blue-50 rounded-3xl">
-                        <div class="p-3 m3-primary-bg rounded-full">
-                            <span class="material-symbols-outlined m3-primary-text">${ex.icon}</span>
-                        </div>
-                        <div class="flex-grow">
-                            <p class="font-bold text-lg text-gray-800">${ex.name}</p>
-                            <p class="text-sm text-gray-500">${ex.totalSets} 组 x ${ex.reps} ${ex.unit}</p>
-                        </div>
-                        <div class="flex gap-2 flex-wrap justify-end">
-                            ${setButtons}
+                const itemHTML = `
+                    <div>
+                        <h3 class="text-lg font-bold">${workout.name} <span class="text-sm font-normal text-gray-500">${workout.reps} ${workout.unit} / 组</span></h3>
+                        <div class="flex space-x-2 mt-2 flex-wrap gap-y-2">
+                            ${setButtonsHTML}
                         </div>
                     </div>
                 `;
-                container.innerHTML += item;
-            }
-            addSetButtonListeners();
-        }
+                trackerListEl.innerHTML += itemHTML;
+            });
 
+            addSetButtonListeners();
+            updateTotalProgress();
+        }
+        
+        // 为组按钮添加事件监听
         function addSetButtonListeners() {
-            document.querySelectorAll('.set-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const exKey = button.dataset.exercise;
-                    const setNum = parseInt(button.dataset.set);
+            document.querySelectorAll('.set-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const workoutId = btn.dataset.workoutId;
+                    const setNum = parseInt(btn.dataset.setNum);
                     
-                    // Toggle logic
-                    if (todayLog.exercises[exKey] === setNum) { // If clicking the last completed set
-                        todayLog.exercises[exKey] = setNum - 1; // Un-complete it
+                    // 如果点击已完成的最后一组，则取消所有
+                    if (workoutState[workoutId] === setNum && btn.classList.contains('completed')) {
+                         workoutState[workoutId] = setNum - 1;
                     } else {
-                        todayLog.exercises[exKey] = setNum; // Complete up to this set
+                        workoutState[workoutId] = setNum;
                     }
                     
-                    renderExercises(); // Re-render to update UI
+                    // 更新UI
+                    const parent = btn.parentElement;
+                    parent.querySelectorAll('.set-btn').forEach(innerBtn => {
+                        if (innerBtn.dataset.workoutId === workoutId) {
+                            if (parseInt(innerBtn.dataset.setNum) <= workoutState[workoutId]) {
+                                innerBtn.classList.add('completed');
+                            } else {
+                                innerBtn.classList.remove('completed');
+                            }
+                        }
+                    });
+                    
+                    updateTotalProgress();
                 });
             });
         }
-        
-        async function loadTodayData() {
-            const todayStr = getTodayString();
-            const docRef = doc(db, `artifacts/${appId}/public/data/workout_logs`, todayStr);
-            const docSnap = await getDoc(docRef);
 
-            if (docSnap.exists()) {
-                todayLog = docSnap.data();
-                if (!todayLog.exercises) todayLog.exercises = {};
-                document.getElementById('notes').value = todayLog.notes || '';
-                if (todayLog.photoUrl) {
+        // 更新总进度条
+        function updateTotalProgress() {
+            const totalSets = workouts.reduce((sum, w) => sum + w.totalSets, 0);
+            const completedSets = Object.values(workoutState).reduce((sum, s) => sum + s, 0);
+            const percentage = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
+
+            const progressBar = document.getElementById('total-progress-bar');
+            progressBar.style.width = `${percentage}%`;
+            progressBar.textContent = `${percentage}%`;
+        }
+
+        // 加载今日数据
+        async function loadTodayData() {
+            const dateStr = getTodayDateString();
+            const workoutDocRef = doc(db, "workouts", dateStr);
+            const workoutDocSnap = await getDoc(workoutDocRef);
+            
+            if (workoutDocSnap.exists()) {
+                renderTracker(workoutDocSnap.data());
+            } else {
+                renderTracker(null); // 初始化空的追踪器
+            }
+
+            const blogDocRef = doc(db, "blogPosts", dateStr);
+            const blogDocSnap = await getDoc(blogDocRef);
+            if (blogDocSnap.exists()) {
+                const data = blogDocSnap.data();
+                document.getElementById('text-entry').value = data.text;
+                if (data.imageBase64) {
+                    imageBase64 = data.imageBase64;
                     const preview = document.getElementById('image-preview');
-                    preview.src = todayLog.photoUrl;
+                    preview.src = imageBase64;
                     preview.classList.remove('hidden');
                 }
             }
-            renderExercises();
         }
 
-        async function saveData() {
-            const saveButton = document.getElementById('save-progress');
-            const saveStatus = document.getElementById('save-status');
-            saveButton.disabled = true;
-            saveStatus.textContent = '正在保存...';
+        // 图片上传处理
+        document.getElementById('photo-upload').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imageBase64 = e.target.result;
+                const preview = document.getElementById('image-preview');
+                preview.src = imageBase64;
+                preview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // 保存所有数据
+        document.getElementById('save-all-button').addEventListener('click', async () => {
+            const button = document.getElementById('save-all-button');
+            const btnText = document.getElementById('btn-text');
+            const btnSpinner = document.getElementById('btn-spinner');
+            const statusEl = document.getElementById('save-status');
+
+            button.disabled = true;
+            btnText.classList.add('hidden');
+            btnSpinner.classList.remove('hidden');
+            statusEl.textContent = '';
+
+            const dateStr = getTodayDateString();
+            const textEntry = document.getElementById('text-entry').value;
 
             try {
-                const todayStr = getTodayString();
-                const fileInput = document.getElementById('photo-upload');
-                const file = fileInput.files[0];
+                // 1. 保存训练进度
+                const totalSets = workouts.reduce((sum, w) => sum + w.totalSets, 0);
+                const completedSets = Object.values(workoutState).reduce((sum, s) => sum + s, 0);
+                const progress = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
                 
-                // 1. Upload photo if exists
-                if (file) {
-                    const storageRef = ref(storage, `images/${todayStr}-${file.name}`);
-                    await uploadBytes(storageRef, file);
-                    todayLog.photoUrl = await getDownloadURL(storageRef);
-                    // Update preview immediately
-                    const preview = document.getElementById('image-preview');
-                    preview.src = todayLog.photoUrl;
-                    preview.classList.remove('hidden');
+                const workoutData = {
+                    date: dateStr,
+                    setsCompleted: workoutState,
+                    progress: progress
+                };
+                await setDoc(doc(db, "workouts", dateStr), workoutData);
+
+                // 2. 如果有图片或文字，保存博客
+                if (imageBase64 || textEntry) {
+                    const blogData = {
+                        date: dateStr,
+                        text: textEntry,
+                        imageBase64: imageBase64,
+                        timestamp: serverTimestamp()
+                    };
+                    await setDoc(doc(db, "blogPosts", dateStr), blogData, { merge: true });
                 }
-
-                // 2. Prepare data object
-                todayLog.notes = document.getElementById('notes').value;
-                todayLog.date = new Date(); // Update timestamp
-
-                // 3. Save to Firestore
-                const docRef = doc(db, `artifacts/${appId}/public/data/workout_logs`, todayStr);
-                await setDoc(docRef, todayLog, { merge: true });
-
-                saveStatus.textContent = '✅ 保存成功！';
+                
+                statusEl.textContent = '保存成功！';
+                setTimeout(() => statusEl.textContent = '', 3000);
 
             } catch (error) {
-                console.error("保存失败: ", error);
-                saveStatus.textContent = `❌ 保存失败: ${error.message}`;
+                console.error("保存失败:", error);
+                statusEl.textContent = '保存失败，请检查网络连接。';
+                statusEl.classList.remove('text-green-600');
+                statusEl.classList.add('text-red-500');
             } finally {
-                setTimeout(() => {
-                    saveButton.disabled = false;
-                    saveStatus.textContent = '';
-                }, 3000);
+                button.disabled = false;
+                btnText.classList.remove('hidden');
+                btnSpinner.classList.add('hidden');
+            }
+        });
+
+
+        // 密码验证逻辑
+        function checkPassword() {
+            const correctPassword = 'Aa136789@';
+            const inputPassword = document.getElementById('password-input').value;
+            const errorEl = document.getElementById('password-error');
+
+            if (inputPassword === correctPassword) {
+                document.getElementById('password-overlay').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                loadTodayData();
+            } else {
+                errorEl.textContent = '密码错误，请重试。';
+                document.getElementById('password-input').value = '';
             }
         }
-        
-        // Password check
-        function handlePassword() {
-            const correctPass = "Aa136789@";
-            const passInput = document.getElementById('password-input');
-            const passSubmit = document.getElementById('password-submit');
-            const passError = document.getElementById('password-error');
-            const modal = document.getElementById('password-modal');
-            const content = document.getElementById('app-content');
 
-            const check = () => {
-                if (passInput.value === correctPass) {
-                    modal.style.display = 'none';
-                    content.classList.remove('hidden');
-                    initializeAppLogic();
-                } else {
-                    passError.textContent = '密码错误，请重试。';
-                    passInput.classList.add('border-red-500');
-                }
-            };
-            
-            passSubmit.addEventListener('click', check);
-            passInput.addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') check();
-            });
-        }
-
-        function initializeAppLogic() {
-            document.getElementById('today-date').textContent = new Date().toLocaleDateString('zh-CN', { dateStyle: 'long' });
-
-            // Auth state listener
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    userId = user.uid;
-                    loadTodayData(); // Load data after user is confirmed
-                } else {
-                    signInAnonymously(auth).catch((error) => {
-                        console.error("匿名登录失败", error);
-                    });
-                }
-            });
-
-            // Event Listeners
-            document.getElementById('save-progress').addEventListener('click', saveData);
-            document.getElementById('photo-upload').addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const preview = document.getElementById('image-preview');
-                        preview.src = e.target.result;
-                        preview.classList.remove('hidden');
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        // Run on page load
-        window.onload = () => {
-            handlePassword();
-        };
+        document.getElementById('password-submit').addEventListener('click', checkPassword);
+        document.getElementById('password-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
 
     </script>
 </body>
