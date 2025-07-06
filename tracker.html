@@ -1,126 +1,122 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="dark">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>腹肌追踪器 - 记录</title>
-    
+    <title>腹肌训练追踪 - 记录</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts & Icons -->
+    <!-- Google Fonts: Manrope -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts Icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
     <style>
-        /* M3 Expressive styles (same as index.html) */
-        :root {
-            --md-sys-color-primary-light: #0061A4;
-            --md-sys-color-on-primary-light: #FFFFFF;
-            --md-sys-color-primary-container-light: #D1E4FF;
-            --md-sys-color-on-primary-container-light: #001D36;
-            --md-sys-color-secondary-light: #535F70;
-            --md-sys-color-on-secondary-light: #FFFFFF;
-            --md-sys-color-secondary-container-light: #D7E3F7;
-            --md-sys-color-on-secondary-container-light: #101C2B;
-            --md-sys-color-surface-light: #F8F9FF;
-            --md-sys-color-on-surface-light: #191C20;
-            --md-sys-color-surface-variant-light: #DFE2EB;
-            --md-sys-color-on-surface-variant-light: #42474E;
-            --md-sys-color-outline-light: #73777F;
-            --md-sys-color-background-light: #F8F9FF;
-            --md-sys-color-on-background-light: #191C20;
-            --md-sys-color-primary-dark: #9ECAFF;
-            --md-sys-color-on-primary-dark: #003258;
-            --md-sys-color-primary-container-dark: #00497D;
-            --md-sys-color-on-primary-container-dark: #D1E4FF;
-            --md-sys-color-secondary-dark: #BBC7DB;
-            --md-sys-color-on-secondary-dark: #253141;
-            --md-sys-color-secondary-container-dark: #3B4858;
-            --md-sys-color-on-secondary-container-dark: #D7E3F7;
-            --md-sys-color-surface-dark: #111418;
-            --md-sys-color-on-surface-dark: #E1E2E6;
-            --md-sys-color-surface-variant-dark: #42474E;
-            --md-sys-color-on-surface-variant-dark: #C2C7CF;
-            --md-sys-color-outline-dark: #8D9199;
-            --md-sys-color-background-dark: #111418;
-            --md-sys-color-on-background-dark: #E1E2E6;
-        }
         body { font-family: 'Manrope', sans-serif; }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .light { background-color: var(--md-sys-color-background-light); color: var(--md-sys-color-on-background-light); }
-        .light .bg-surface { background-color: var(--md-sys-color-surface-light); }
-        .light .text-on-surface { color: var(--md-sys-color-on-surface-light); }
-        .light .bg-surface-variant { background-color: var(--md-sys-color-surface-variant-light); }
-        .light .text-on-surface-variant { color: var(--md-sys-color-on-surface-variant-light); }
-        .light .bg-primary-container { background-color: var(--md-sys-color-primary-container-light); }
-        .light .text-on-primary-container { color: var(--md-sys-color-on-primary-container-light); }
-        .light .outline-color { border-color: var(--md-sys-color-outline-light); }
-        .light .progress-bar-bg { background-color: var(--md-sys-color-primary-container-light); }
-        .light .progress-bar-fill { background-color: var(--md-sys-color-primary-light); }
-        .light .text-primary { color: var(--md-sys-color-primary-light); }
-        .light .btn-done { background-color: var(--md-sys-color-primary-light); color: var(--md-sys-color-on-primary-light); }
-        .light .btn-pending { background-color: var(--md-sys-color-secondary-container-light); color: var(--md-sys-color-on-secondary-container-light); }
-        .dark { background-color: var(--md-sys-color-background-dark); color: var(--md-sys-color-on-background-dark); }
-        .dark .bg-surface { background-color: var(--md-sys-color-surface-dark); }
-        .dark .text-on-surface { color: var(--md-sys-color-on-surface-dark); }
-        .dark .bg-surface-variant { background-color: var(--md-sys-color-surface-variant-dark); }
-        .dark .text-on-surface-variant { color: var(--md-sys-color-on-surface-variant-dark); }
-        .dark .bg-primary-container { background-color: var(--md-sys-color-primary-container-dark); }
-        .dark .text-on-primary-container { color: var(--md-sys-color-on-primary-container-dark); }
-        .dark .outline-color { border-color: var(--md-sys-color-outline-dark); }
-        .dark .progress-bar-bg { background-color: var(--md-sys-color-secondary-container-dark); }
-        .dark .progress-bar-fill { background-color: var(--md-sys-color-primary-dark); }
-        .dark .text-primary { color: var(--md-sys-color-primary-dark); }
-        .dark .btn-done { background-color: var(--md-sys-color-primary-dark); color: var(--md-sys-color-on-primary-dark); }
-        .dark .btn-pending { background-color: var(--md-sys-color-secondary-container-dark); color: var(--md-sys-color-on-secondary-container-dark); }
-        .card { border-radius: 1.75rem; }
-        .progress-bar { border-radius: 1rem; }
-        .action-button { border-radius: 1.5rem; }
+        .m3-surface { background-color: #ffffff; border-radius: 1.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .m3-primary-text { color: #005ac1; }
+        .m3-primary-bg { background-color: #d8e2ff; }
+        .m3-primary-fill { background-color: #005ac1; }
+        .m3-button {
+            background-color: #005ac1;
+            color: white;
+            font-weight: bold;
+            border-radius: 999px;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .m3-button:hover { background-color: #004a9b; box-shadow: 0 2px 8px rgba(0, 90, 193, 0.3); }
+        .m3-button:disabled { background-color: #a5a5a5; cursor: not-allowed; }
+        .set-button {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 2px solid #b0c4ff; color: #b0c4ff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; transition: all 0.2s ease;
+        }
+        .set-button.completed { background-color: #005ac1; color: white; border-color: #005ac1; }
+        .password-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 999; backdrop-filter: blur(5px);
+        }
     </style>
 </head>
-<body class="transition-colors duration-500">
+<body class="bg-blue-50 text-gray-800">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-3xl">
-        <!-- Header -->
-        <header class="flex justify-between items-center mb-8">
-            <div class="flex items-center gap-4">
-                <span class="material-symbols-outlined text-4xl text-primary">edit_note</span>
-                <h1 class="text-2xl md:text-3xl font-bold text-on-surface">记录训练</h1>
-            </div>
-             <a href="./index.html" class="p-2 rounded-full hover:bg-surface-variant transition-colors" aria-label="返回状态页">
-                <span class="material-symbols-outlined text-on-surface-variant">monitoring</span>
-            </a>
-        </header>
-
-        <main id="tracker-list" class="space-y-8">
-            <!-- Tracker items will be injected by JS -->
-            <div class="text-center p-8 text-on-surface-variant">
-                <p>正在加载训练项目...</p>
-            </div>
-        </main>
-        
-        <!-- Completion Modal -->
-        <div id="completion-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-            <div class="card bg-surface p-8 text-center max-w-sm mx-4">
-                <span class="material-symbols-outlined text-6xl text-primary mb-4">celebration</span>
-                <h2 class="text-2xl font-bold text-on-surface mb-2">太棒了!</h2>
-                <p class="text-on-surface-variant mb-6">你已完成今天所有的腹肌训练！</p>
-                <a href="./index.html" class="inline-block bg-primary-container text-on-primary-container font-bold py-3 px-6 rounded-full hover:opacity-90 transition-opacity">
-                    查看今日成果
-                </a>
-            </div>
+    <!-- Password Modal -->
+    <div id="password-modal" class="password-modal">
+        <div class="m3-surface p-8 rounded-3xl w-11/12 max-w-sm text-center">
+            <h2 class="text-2xl font-bold mb-4">请输入密码</h2>
+            <p class="text-gray-500 mb-6">此页面受密码保护。</p>
+            <input type="password" id="password-input" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+            <p id="password-error" class="text-red-500 h-5 mt-2 text-sm"></p>
+            <button id="password-submit" class="m3-button w-full justify-center mt-4">进入</button>
         </div>
     </div>
 
+    <div id="app-content" class="container mx-auto p-4 md:p-8 max-w-4xl hidden">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-4xl font-extrabold m3-primary-text">记录今日训练</h1>
+                <p id="today-date" class="text-gray-500 mt-1"></p>
+            </div>
+             <nav class="flex gap-2">
+                <a href="./index.html" class="px-4 py-2 hover:bg-blue-100 rounded-full">状态</a>
+                <a href="./tracker.html" class="px-4 py-2 m3-primary-bg text-blue-800 font-bold rounded-full">记录</a>
+                <a href="./blog.html" class="px-4 py-2 hover:bg-blue-100 rounded-full">博客</a>
+            </nav>
+        </header>
+
+        <main class="space-y-8">
+            <!-- Exercises Tracker -->
+            <div class="m3-surface p-6">
+                <h2 class="text-2xl font-bold mb-6 text-gray-700">训练项目</h2>
+                <div id="exercise-list" class="space-y-6">
+                    <!-- JS will generate exercises here -->
+                </div>
+            </div>
+
+            <!-- Daily Log -->
+            <div class="m3-surface p-6">
+                <h2 class="text-2xl font-bold mb-6 text-gray-700">每日记录</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="photo-upload" class="font-bold text-gray-600">上传今日照片</label>
+                        <input type="file" id="photo-upload" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
+                        <img id="image-preview" src="" class="mt-4 rounded-xl max-h-60 hidden" alt="图片预览"/>
+                    </div>
+                    <div>
+                        <label for="notes" class="font-bold text-gray-600">今日感想</label>
+                        <textarea id="notes" rows="4" class="mt-1 w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" placeholder="记录一下今天的感受，或者任何想说的话..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Save Button -->
+            <div class="text-center">
+                 <button id="save-progress" class="m3-button text-lg px-8 py-4">
+                    <span class="material-symbols-outlined">save</span>
+                    保存今日所有进度
+                </button>
+                <p id="save-status" class="mt-4 h-6 text-green-600 font-bold"></p>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
 
-        // IMPORTANT: Your provided Firebase config
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyC7XJuqUZrNbnuWZMIn3XBBctIYDwsZ4kE",
             authDomain: "my-abs-tracker-0.firebaseapp.com",
@@ -131,44 +127,26 @@
             measurementId: "G-KWTCEWNW1Q"
         };
         
-        // App ID for Firestore path
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'my-abs-tracker-0';
-
-        // Initialize Firebase
+        // Init Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'my-abs-tracker-0';
 
-        // --- App State ---
+        let userId = null;
+        let todayLog = { exercises: {} };
+
+        // Exercises Definition
         const exercises = {
-            plank: { name: "平板支撑", total: 4, unit: "组", duration: "1分钟/组", icon: "exercise" },
-            kneeTucks: { name: "摸膝卷腹", total: 4, unit: "组", duration: "20次/组", icon: "self_improvement" },
-            bicycleCrunches: { name: "仰卧蹬车", total: 4, unit: "组", duration: "20次/组", icon: "pedal_bike" },
-            russianTwist: { name: "俄罗斯转体", total: 4, unit: "组", duration: "18次/组", icon: "sports_gymnastics" },
-            abStretch: { name: "腹肌拉伸", total: 1, unit: "完成", duration: "60秒", icon: "accessibility_new" },
+            'plank': { name: '平板支撑', totalSets: 4, unit: '分钟', reps: 1, icon: 'exercise' },
+            'crunches': { name: '摸膝卷腹', totalSets: 4, unit: '次', reps: 20, icon: 'fitness_center' },
+            'bicycle': { name: '仰卧蹬车', totalSets: 4, unit: '次', reps: 20, icon: 'directions_bike' },
+            'twists': { name: '俄罗斯转体', totalSets: 4, unit: '次', reps: 18, icon: 'sync_alt' },
+            'stretch': { name: '腹肌拉伸', totalSets: 1, unit: '秒', reps: 60, icon: 'self_improvement' }
         };
-        let workoutData = {};
 
-        // --- UI Elements ---
-        const trackerList = document.getElementById('tracker-list');
-        const completionModal = document.getElementById('completion-modal');
-
-        // --- Functions ---
-        
-        // Initialize theme from localStorage (copied from index.html for consistency)
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            const html = document.documentElement;
-            if (savedTheme === 'light') {
-                html.classList.remove('dark');
-                html.classList.add('light');
-            } else {
-                html.classList.add('dark');
-                html.classList.remove('light');
-            }
-        }
-
-        // Get current date as YYYY-MM-DD string
+        // Get today's date string YYYY-MM-DD
         function getTodayString() {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -177,164 +155,178 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
-        // Render the entire tracker UI
-        function renderTracker() {
-            trackerList.innerHTML = '';
+        // Render exercise list
+        function renderExercises() {
+            const container = document.getElementById('exercise-list');
+            container.innerHTML = '';
             for (const key in exercises) {
-                const exercise = exercises[key];
-                const completed = workoutData[key]?.completed || 0;
-                const percentage = (completed / exercise.total) * 100;
+                const ex = exercises[key];
+                const completedSets = todayLog.exercises[key] || 0;
                 
-                let buttonsHTML = '';
-                for (let i = 1; i <= exercise.total; i++) {
-                    const isDone = i <= completed;
-                    const buttonClass = isDone ? 'btn-done' : 'btn-pending';
-                    const icon = isDone ? 'check_circle' : 'radio_button_unchecked';
-                    const text = exercise.total > 1 ? `第 ${i} 组` : '完成';
-                    buttonsHTML += `
-                        <button data-key="${key}" data-set="${i}" class="action-button ${buttonClass} flex-1 flex items-center justify-center gap-2 py-3 px-4 font-semibold transition-colors duration-300">
-                            <span class="material-symbols-outlined">${icon}</span>
-                            <span>${text}</span>
-                        </button>
-                    `;
+                let setButtons = '';
+                for(let i = 1; i <= ex.totalSets; i++) {
+                    setButtons += `<button class="set-button ${i <= completedSets ? 'completed' : ''}" data-exercise="${key}" data-set="${i}">${i}</button>`;
                 }
 
-                const itemHTML = `
-                    <section class="card bg-surface p-6" id="card-${key}">
-                        <div class="flex items-center gap-4 mb-4">
-                             <div class="bg-primary-container text-on-primary-container p-3 rounded-full">
-                                <span class="material-symbols-outlined">${exercise.icon}</span>
-                            </div>
-                            <div class="flex-1">
-                                <h3 class="font-bold text-lg text-on-surface">${exercise.name}</h3>
-                                <p class="text-sm text-on-surface-variant">${exercise.duration}</p>
-                            </div>
+                const item = `
+                    <div class="flex items-center gap-4 p-4 bg-blue-50 rounded-3xl">
+                        <div class="p-3 m3-primary-bg rounded-full">
+                            <span class="material-symbols-outlined m3-primary-text">${ex.icon}</span>
                         </div>
-                        <div class="w-full progress-bar-bg h-3 progress-bar overflow-hidden mb-4">
-                            <div id="progress-${key}" class="progress-bar-fill h-full transition-all duration-500" style="width: ${percentage}%"></div>
+                        <div class="flex-grow">
+                            <p class="font-bold text-lg text-gray-800">${ex.name}</p>
+                            <p class="text-sm text-gray-500">${ex.totalSets} 组 x ${ex.reps} ${ex.unit}</p>
                         </div>
-                        <div class="flex gap-2 flex-wrap">
-                            ${buttonsHTML}
+                        <div class="flex gap-2 flex-wrap justify-end">
+                            ${setButtons}
                         </div>
-                    </section>
+                    </div>
                 `;
-                trackerList.innerHTML += itemHTML;
+                container.innerHTML += item;
             }
-            addEventListenersToButtons();
+            addSetButtonListeners();
         }
 
-        // Update UI for a specific exercise
-        function updateExerciseUI(key) {
-            const completed = workoutData[key]?.completed || 0;
-            const total = exercises[key].total;
-            const percentage = (completed / total) * 100;
-
-            // Update progress bar
-            document.getElementById(`progress-${key}`).style.width = `${percentage}%`;
-
-            // Update buttons
-            const buttons = document.querySelectorAll(`#card-${key} button`);
-            buttons.forEach(button => {
-                const setNumber = parseInt(button.dataset.set);
-                if (setNumber <= completed) {
-                    button.classList.remove('btn-pending');
-                    button.classList.add('btn-done');
-                    button.querySelector('.material-symbols-outlined').textContent = 'check_circle';
-                } else {
-                    button.classList.remove('btn-done');
-                    button.classList.add('btn-pending');
-                    button.querySelector('.material-symbols-outlined').textContent = 'radio_button_unchecked';
-                }
-            });
-        }
-        
-        // Check if all exercises are completed
-        function checkAllCompleted() {
-            for (const key in exercises) {
-                if ((workoutData[key]?.completed || 0) < exercises[key].total) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        // Handle button clicks
-        async function handleSetClick(event) {
-            const button = event.currentTarget;
-            const key = button.dataset.key;
-            const set = parseInt(button.dataset.set);
-
-            // If clicking an already completed set, we assume user wants to reset subsequent sets
-            if (set === (workoutData[key]?.completed || 0)) {
-                 workoutData[key].completed--;
-            } else {
-                 workoutData[key].completed = set;
-            }
-
-            updateExerciseUI(key);
-            await saveData();
-
-            if (checkAllCompleted()) {
-                completionModal.classList.remove('hidden');
-            }
-        }
-
-        // Add event listeners to all action buttons
-        function addEventListenersToButtons() {
-            const buttons = document.querySelectorAll('.action-button');
-            buttons.forEach(button => {
-                button.addEventListener('click', handleSetClick);
-            });
-        }
-        
-        // Save data to Firestore
-        async function saveData() {
-            if (!auth.currentUser) {
-                console.error("User not authenticated. Cannot save data.");
-                return;
-            }
-            const todayStr = getTodayString();
-            const docRef = doc(db, "artifacts", appId, "public/data/workout_logs", todayStr);
-            try {
-                // Use setDoc with merge:true to create or update the document
-                await setDoc(docRef, workoutData, { merge: true });
-                console.log("Data saved successfully!");
-            } catch (error) {
-                console.error("Error saving data: ", error);
-            }
-        }
-
-        // --- Main Logic ---
-        async function main() {
-            initTheme();
-            
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    // User is signed in.
-                    const todayStr = getTodayString();
-                    const docRef = doc(db, "artifacts", appId, "public/data/workout_logs", todayStr);
-                    const docSnap = await getDoc(docRef);
-
-                    if (docSnap.exists()) {
-                        workoutData = docSnap.data();
+        function addSetButtonListeners() {
+            document.querySelectorAll('.set-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const exKey = button.dataset.exercise;
+                    const setNum = parseInt(button.dataset.set);
+                    
+                    // Toggle logic
+                    if (todayLog.exercises[exKey] === setNum) { // If clicking the last completed set
+                        todayLog.exercises[exKey] = setNum - 1; // Un-complete it
                     } else {
-                        // Initialize today's data if it doesn't exist
-                        for (const key in exercises) {
-                            workoutData[key] = { completed: 0 };
-                        }
+                        todayLog.exercises[exKey] = setNum; // Complete up to this set
                     }
-                    renderTracker();
+                    
+                    renderExercises(); // Re-render to update UI
+                });
+            });
+        }
+        
+        async function loadTodayData() {
+            const todayStr = getTodayString();
+            const docRef = doc(db, `artifacts/${appId}/public/data/workout_logs`, todayStr);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                todayLog = docSnap.data();
+                if (!todayLog.exercises) todayLog.exercises = {};
+                document.getElementById('notes').value = todayLog.notes || '';
+                if (todayLog.photoUrl) {
+                    const preview = document.getElementById('image-preview');
+                    preview.src = todayLog.photoUrl;
+                    preview.classList.remove('hidden');
+                }
+            }
+            renderExercises();
+        }
+
+        async function saveData() {
+            const saveButton = document.getElementById('save-progress');
+            const saveStatus = document.getElementById('save-status');
+            saveButton.disabled = true;
+            saveStatus.textContent = '正在保存...';
+
+            try {
+                const todayStr = getTodayString();
+                const fileInput = document.getElementById('photo-upload');
+                const file = fileInput.files[0];
+                
+                // 1. Upload photo if exists
+                if (file) {
+                    const storageRef = ref(storage, `images/${todayStr}-${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    todayLog.photoUrl = await getDownloadURL(storageRef);
+                    // Update preview immediately
+                    const preview = document.getElementById('image-preview');
+                    preview.src = todayLog.photoUrl;
+                    preview.classList.remove('hidden');
+                }
+
+                // 2. Prepare data object
+                todayLog.notes = document.getElementById('notes').value;
+                todayLog.date = new Date(); // Update timestamp
+
+                // 3. Save to Firestore
+                const docRef = doc(db, `artifacts/${appId}/public/data/workout_logs`, todayStr);
+                await setDoc(docRef, todayLog, { merge: true });
+
+                saveStatus.textContent = '✅ 保存成功！';
+
+            } catch (error) {
+                console.error("保存失败: ", error);
+                saveStatus.textContent = `❌ 保存失败: ${error.message}`;
+            } finally {
+                setTimeout(() => {
+                    saveButton.disabled = false;
+                    saveStatus.textContent = '';
+                }, 3000);
+            }
+        }
+        
+        // Password check
+        function handlePassword() {
+            const correctPass = "Aa136789@";
+            const passInput = document.getElementById('password-input');
+            const passSubmit = document.getElementById('password-submit');
+            const passError = document.getElementById('password-error');
+            const modal = document.getElementById('password-modal');
+            const content = document.getElementById('app-content');
+
+            const check = () => {
+                if (passInput.value === correctPass) {
+                    modal.style.display = 'none';
+                    content.classList.remove('hidden');
+                    initializeAppLogic();
                 } else {
-                    // User is signed out. Sign in anonymously.
+                    passError.textContent = '密码错误，请重试。';
+                    passInput.classList.add('border-red-500');
+                }
+            };
+            
+            passSubmit.addEventListener('click', check);
+            passInput.addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') check();
+            });
+        }
+
+        function initializeAppLogic() {
+            document.getElementById('today-date').textContent = new Date().toLocaleDateString('zh-CN', { dateStyle: 'long' });
+
+            // Auth state listener
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    userId = user.uid;
+                    loadTodayData(); // Load data after user is confirmed
+                } else {
                     signInAnonymously(auth).catch((error) => {
-                        console.error("Anonymous sign-in failed:", error);
+                        console.error("匿名登录失败", error);
                     });
                 }
             });
+
+            // Event Listeners
+            document.getElementById('save-progress').addEventListener('click', saveData);
+            document.getElementById('photo-upload').addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const preview = document.getElementById('image-preview');
+                        preview.src = e.target.result;
+                        preview.classList.remove('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
         }
 
-        // Run the app
-        main();
+        // Run on page load
+        window.onload = () => {
+            handlePassword();
+        };
 
     </script>
 </body>
