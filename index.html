@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>腹肌追踪器 - 状态</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        /* Material 3 Expressive Design System Customizations */
+        :root {
+            /* Light Theme Colors */
+            --md-sys-color-primary-light: #0061A4;
+            --md-sys-color-on-primary-light: #FFFFFF;
+            --md-sys-color-primary-container-light: #D1E4FF;
+            --md-sys-color-on-primary-container-light: #001D36;
+            --md-sys-color-secondary-light: #535F70;
+            --md-sys-color-on-secondary-light: #FFFFFF;
+            --md-sys-color-secondary-container-light: #D7E3F7;
+            --md-sys-color-on-secondary-container-light: #101C2B;
+            --md-sys-color-surface-light: #F8F9FF;
+            --md-sys-color-on-surface-light: #191C20;
+            --md-sys-color-surface-variant-light: #DFE2EB;
+            --md-sys-color-on-surface-variant-light: #42474E;
+            --md-sys-color-outline-light: #73777F;
+            --md-sys-color-background-light: #F8F9FF;
+            --md-sys-color-on-background-light: #191C20;
+
+            /* Dark Theme Colors */
+            --md-sys-color-primary-dark: #9ECAFF;
+            --md-sys-color-on-primary-dark: #003258;
+            --md-sys-color-primary-container-dark: #00497D;
+            --md-sys-color-on-primary-container-dark: #D1E4FF;
+            --md-sys-color-secondary-dark: #BBC7DB;
+            --md-sys-color-on-secondary-dark: #253141;
+            --md-sys-color-secondary-container-dark: #3B4858;
+            --md-sys-color-on-secondary-container-dark: #D7E3F7;
+            --md-sys-color-surface-dark: #111418;
+            --md-sys-color-on-surface-dark: #E1E2E6;
+            --md-sys-color-surface-variant-dark: #42474E;
+            --md-sys-color-on-surface-variant-dark: #C2C7CF;
+            --md-sys-color-outline-dark: #8D9199;
+            --md-sys-color-background-dark: #111418;
+            --md-sys-color-on-background-dark: #E1E2E6;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Light mode variables */
+        .light {
+            background-color: var(--md-sys-color-background-light);
+            color: var(--md-sys-color-on-background-light);
+        }
+        .light .bg-surface { background-color: var(--md-sys-color-surface-light); }
+        .light .text-on-surface { color: var(--md-sys-color-on-surface-light); }
+        .light .bg-surface-variant { background-color: var(--md-sys-color-surface-variant-light); }
+        .light .text-on-surface-variant { color: var(--md-sys-color-on-surface-variant-light); }
+        .light .bg-primary-container { background-color: var(--md-sys-color-primary-container-light); }
+        .light .text-on-primary-container { color: var(--md-sys-color-on-primary-container-light); }
+        .light .outline-color { border-color: var(--md-sys-color-outline-light); }
+        .light .progress-bar-bg { background-color: var(--md-sys-color-primary-container-light); }
+        .light .progress-bar-fill { background-color: var(--md-sys-color-primary-light); }
+        .light .text-primary { color: var(--md-sys-color-primary-light); }
+
+
+        /* Dark mode variables */
+        .dark {
+            background-color: var(--md-sys-color-background-dark);
+            color: var(--md-sys-color-on-background-dark);
+        }
+        .dark .bg-surface { background-color: var(--md-sys-color-surface-dark); }
+        .dark .text-on-surface { color: var(--md-sys-color-on-surface-dark); }
+        .dark .bg-surface-variant { background-color: var(--md-sys-color-surface-variant-dark); }
+        .dark .text-on-surface-variant { color: var(--md-sys-color-on-surface-variant-dark); }
+        .dark .bg-primary-container { background-color: var(--md-sys-color-primary-container-dark); }
+        .dark .text-on-primary-container { color: var(--md-sys-color-on-primary-container-dark); }
+        .dark .outline-color { border-color: var(--md-sys-color-outline-dark); }
+        .dark .progress-bar-bg { background-color: var(--md-sys-color-secondary-container-dark); }
+        .dark .progress-bar-fill { background-color: var(--md-sys-color-primary-dark); }
+        .dark .text-primary { color: var(--md-sys-color-primary-dark); }
+
+        /* Expressive corner radius */
+        .card {
+            border-radius: 1.75rem; /* 28px */
+        }
+        .progress-bar {
+            border-radius: 1rem; /* 16px */
+        }
+    </style>
+</head>
+<body class="transition-colors duration-500">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-3xl">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-4">
+                <span class="material-symbols-outlined text-4xl text-primary">fitness_center</span>
+                <h1 class="text-2xl md:text-3xl font-bold text-on-surface">腹肌挑战</h1>
+            </div>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-surface-variant transition-colors">
+                <span class="material-symbols-outlined text-on-surface-variant">dark_mode</span>
+            </button>
+        </header>
+
+        <main class="space-y-8">
+            <!-- Calendar Card -->
+            <section class="card bg-surface p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 id="calendar-month" class="text-xl font-bold text-on-surface-variant"></h2>
+                </div>
+                <div id="calendar-grid" class="grid grid-cols-7 gap-2 text-center">
+                    <!-- Calendar days will be generated by JS -->
+                </div>
+            </section>
+
+            <!-- Progress Card -->
+            <section class="card bg-surface p-6">
+                <h2 class="text-xl font-bold mb-6 text-on-surface">今日进度 (<span id="today-date"></span>)</h2>
+                <div id="progress-list" class="space-y-6">
+                    <!-- Progress items will be injected by JS -->
+                     <div class="text-center p-8 text-on-surface-variant">
+                        <p>正在加载今日数据...</p>
+                        <p>如果没有数据显示，说明今天还没有开始训练哦。</p>
+                    </div>
+                </div>
+                 <div class="mt-8 text-center">
+                    <a href="./tracker.html" class="inline-block bg-primary-container text-on-primary-container font-bold py-3 px-6 rounded-full hover:opacity-90 transition-opacity">
+                        前往记录页
+                    </a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // IMPORTANT: Your provided Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyC7XJuqUZrNbnuWZMIn3XBBctIYDwsZ4kE",
+            authDomain: "my-abs-tracker-0.firebaseapp.com",
+            projectId: "my-abs-tracker-0",
+            storageBucket: "my-abs-tracker-0.firebasestorage.app",
+            messagingSenderId: "799705014883",
+            appId: "1:799705014883:web:3d340de1088848cb3f8e56",
+            measurementId: "G-KWTCEWNW1Q"
+        };
+        
+        // App ID for Firestore path
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'my-abs-tracker-0';
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- App State ---
+        const exercises = {
+            plank: { name: "平板支撑", total: 4, unit: "组", duration: "1分钟/组", icon: "exercise" },
+            kneeTucks: { name: "摸膝卷腹", total: 4, unit: "组", duration: "20次/组", icon: "self_improvement" },
+            bicycleCrunches: { name: "仰卧蹬车", total: 4, unit: "组", duration: "20次/组", icon: "pedal_bike" },
+            russianTwist: { name: "俄罗斯转体", total: 4, unit: "组", duration: "18次/组", icon: "sports_gymnastics" },
+            abStretch: { name: "腹肌拉伸", total: 1, unit: "完成", duration: "60秒", icon: "accessibility_new" },
+        };
+
+        // --- UI Elements ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const progressList = document.getElementById('progress-list');
+        const todayDateEl = document.getElementById('today-date');
+        const calendarGrid = document.getElementById('calendar-grid');
+        const calendarMonthEl = document.getElementById('calendar-month');
+
+        // --- Functions ---
+
+        // Get current date as YYYY-MM-DD string
+        function getTodayString() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+        
+        // Toggle theme
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            html.classList.toggle('light');
+            const isDark = html.classList.contains('dark');
+            themeToggle.querySelector('.material-symbols-outlined').textContent = isDark ? 'light_mode' : 'dark_mode';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const html = document.documentElement;
+            if (savedTheme === 'light') {
+                html.classList.remove('dark');
+                html.classList.add('light');
+            } else {
+                html.classList.add('dark');
+                html.classList.remove('light');
+            }
+            const isDark = html.classList.contains('dark');
+            themeToggle.querySelector('.material-symbols-outlined').textContent = isDark ? 'light_mode' : 'dark_mode';
+        }
+
+        // Render progress bars
+        function renderProgress(data) {
+            progressList.innerHTML = ''; // Clear existing content
+            if (!data) {
+                 progressList.innerHTML = `<div class="text-center p-8 text-on-surface-variant">
+                    <p>今天还没有训练数据哦。</p>
+                    <p>快去<a href="./tracker.html" class="font-bold text-primary underline">记录页面</a>开始吧！</p>
+                </div>`;
+                return;
+            }
+
+            for (const key in exercises) {
+                const exercise = exercises[key];
+                const completed = data[key]?.completed || 0;
+                const percentage = exercise.total > 0 ? (completed / exercise.total) * 100 : 0;
+
+                const itemHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="bg-primary-container text-on-primary-container p-3 rounded-full">
+                            <span class="material-symbols-outlined">${exercise.icon}</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <span class="font-bold text-on-surface">${exercise.name}</span>
+                                <span class="text-sm text-on-surface-variant">${completed}/${exercise.total} ${exercise.unit}</span>
+                            </div>
+                            <div class="w-full progress-bar-bg h-3 progress-bar overflow-hidden">
+                                <div class="progress-bar-fill h-full transition-all duration-500" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                progressList.innerHTML += itemHTML;
+            }
+        }
+        
+        // Render Calendar
+        function renderCalendar() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const today = now.getDate();
+
+            calendarMonthEl.textContent = `${year}年 ${month + 1}月`;
+            calendarGrid.innerHTML = '';
+
+            const daysOfWeek = ['日', '一', '二', '三', '四', '五', '六'];
+            daysOfWeek.forEach(day => {
+                calendarGrid.innerHTML += `<div class="font-bold text-on-surface-variant text-sm">${day}</div>`;
+            });
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                calendarGrid.innerHTML += `<div></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                let classes = "p-2 rounded-full flex items-center justify-center";
+                if (day === today) {
+                    classes += " bg-primary-container text-on-primary-container font-bold";
+                } else {
+                    classes += " text-on-surface";
+                }
+                calendarGrid.innerHTML += `<div class="${classes}">${day}</div>`;
+            }
+        }
+
+        // --- Main Logic ---
+        async function main() {
+            initTheme();
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            const todayStr = getTodayString();
+            todayDateEl.textContent = todayStr;
+            renderCalendar();
+
+            try {
+                // Sign in anonymously to get a UID for potential future use, and to satisfy security rules
+                await signInAnonymously(auth);
+
+                const docRef = doc(db, "artifacts", appId, "public/data/workout_logs", todayStr);
+
+                // Listen for real-time updates
+                onSnapshot(docRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        renderProgress(docSnap.data());
+                    } else {
+                        console.log("No workout data for today yet.");
+                        renderProgress(null); // Render empty state
+                    }
+                }, (error) => {
+                    console.error("Error fetching workout data:", error);
+                    progressList.innerHTML = `<div class="text-center p-8 text-red-500">无法加载数据。请检查网络连接和 Firebase 设置。</div>`;
+                });
+
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                progressList.innerHTML = `<div class="text-center p-8 text-red-500">Firebase 初始化失败。</div>`;
+            }
+        }
+
+        // Run the app
+        main();
+
+    </script>
+</body>
+</html>
