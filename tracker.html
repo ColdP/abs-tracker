@@ -85,18 +85,50 @@
             background-color: #a5b4fc;
             cursor: not-allowed;
         }
+        .timer-btn {
+            color: white;
+            padding: 0.5rem 2rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            min-width: 100px;
+            text-align: center;
+        }
+        .auth-form-container {
+            width: 100%;
+            max-width: 24rem;
+        }
     </style>
 </head>
 <body class="antialiased text-slate-800">
 
-    <!-- 密码输入遮罩 -->
-    <div id="password-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex justify-center items-center z-50">
-        <div class="bg-white p-8 rounded-2xl shadow-xl text-center w-11/12 max-w-sm">
-            <h2 class="text-2xl font-bold mb-4">请输入访问密码</h2>
-            <p class="text-gray-600 mb-6">此页面仅供自己记录使用</p>
-            <input type="password" id="password-input" class="w-full p-3 border-2 border-gray-300 rounded-lg text-center focus:border-indigo-500 focus:ring-indigo-500" placeholder="********">
-            <button id="password-submit" class="w-full mt-4 submit-btn">进入</button>
-            <p id="password-error" class="text-red-500 mt-2 h-4"></p>
+    <!-- 认证遮罩 -->
+    <div id="auth-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex justify-center items-center z-50">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-11/12 max-w-sm">
+            <!-- 登录表单 -->
+            <div id="login-form">
+                <h2 class="text-2xl font-bold mb-4 text-center">登录</h2>
+                <div class="space-y-4">
+                    <input type="email" id="login-email" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="电子邮件地址">
+                    <input type="password" id="login-password" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="密码">
+                    <button id="login-btn" class="w-full submit-btn">登录</button>
+                    <p id="login-error" class="text-red-500 text-sm h-4 text-center"></p>
+                </div>
+            </div>
+            <!-- 注册表单 -->
+            <div id="signup-form" class="hidden">
+                <h2 class="text-2xl font-bold mb-4 text-center">创建账户</h2>
+                <div class="space-y-4">
+                    <input type="email" id="signup-email" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="电子邮件地址">
+                    <input type="password" id="signup-password" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:ring-indigo-500" placeholder="密码 (至少6位)">
+                    <button id="signup-btn" class="w-full submit-btn">注册</button>
+                    <p id="signup-error" class="text-red-500 text-sm h-4 text-center"></p>
+                    <p class="text-center text-sm">
+                        已经有账户了？ <a href="#" id="show-login" class="font-medium text-indigo-600 hover:text-indigo-500">直接登录</a>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -109,17 +141,36 @@
                 <a href="./index.html" class="nav-link">主页</a>
                 <a href="./tracker.html" class="nav-link active">开始训练</a>
                 <a href="./blog.html" class="nav-link">博客墙</a>
+                <button id="logout-btn" class="nav-link !text-red-600 hover:!bg-red-100">登出</button>
             </nav>
         </header>
 
         <main class="space-y-8">
+            <!-- 计时器 -->
+            <section class="m3-expressive-card">
+                <h2 class="text-xl font-bold mb-4 flex items-center">
+                    <span class="material-symbols-outlined mr-2 text-indigo-600">timer</span>
+                    平板支撑计时器
+                </h2>
+                <div class="text-center">
+                    <p class="text-lg text-gray-600">第 <span id="current-set">1</span> / 4 组</p>
+                    <div id="timer-display" class="text-7xl font-bold my-4 text-indigo-600">1:00</div>
+                    <div id="timer-status" class="text-lg font-semibold h-7 mb-4"></div>
+                </div>
+                <div id="timer-controls" class="flex justify-center space-x-4">
+                    <button id="start-pause-btn" class="timer-btn bg-indigo-600 hover:bg-indigo-700">开始</button>
+                    <button id="reset-btn" class="timer-btn bg-gray-500 hover:bg-gray-600">重置</button>
+                </div>
+                <div id="rest-controls" class="hidden justify-center">
+                     <button id="skip-rest-btn" class="timer-btn bg-green-500 hover:bg-green-600">跳过休息</button>
+                </div>
+            </section>
+
             <!-- 训练项目 -->
             <section class="m3-expressive-card">
                 <h2 class="text-xl font-bold mb-2">训练清单</h2>
                 <p class="text-gray-500 mb-6">每完成一组，就点击对应的数字按钮。</p>
-                <div id="tracker-list" class="space-y-6">
-                    <!-- 追踪器将由JS动态生成 -->
-                </div>
+                <div id="tracker-list" class="space-y-6"></div>
                 <div class="mt-8">
                     <h3 class="font-bold text-lg mb-2">总进度</h3>
                     <div class="progress-bar-bg">
@@ -154,6 +205,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         // Firebase配置
         const firebaseConfig = {
@@ -166,11 +218,12 @@
             measurementId: "G-KWTCEWNW1Q"
         };
 
-        // 初始化Firebase
+        // 初始化Firebase服务
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const auth = getAuth(app);
 
-        // 训练项目定义
+        // --- 全局变量 ---
         const workouts = [
             { id: 'plank', name: '平板支撑', totalSets: 4, unit: '分钟', reps: 1 },
             { id: 'crunches', name: '摸膝卷腹', totalSets: 4, unit: '次', reps: 20 },
@@ -178,11 +231,185 @@
             { id: 'twists', name: '俄罗斯转体', totalSets: 4, unit: '次', reps: 18 },
             { id: 'stretch', name: '腹肌拉伸', totalSets: 1, unit: '秒', reps: 60 }
         ];
-        
-        let workoutState = {}; // 用于存储当前训练状态
-        let imageBase64 = null; // 用于存储图片base64编码
+        let workoutState = {};
+        let imageBase64 = null;
 
-        // 获取今天的日期字符串 YYYY-MM-DD
+        // --- 认证逻辑 ---
+        const authOverlay = document.getElementById('auth-overlay');
+        const mainContent = document.getElementById('main-content');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                // 用户已登录
+                authOverlay.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                loadTodayData();
+            } else {
+                // 用户未登录
+                authOverlay.classList.remove('hidden');
+                mainContent.classList.add('hidden');
+            }
+        });
+        
+        // 登录
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errorEl = document.getElementById('login-error');
+            errorEl.textContent = '';
+
+            signInWithEmailAndPassword(auth, email, password)
+                .catch(error => {
+                    errorEl.textContent = '登录失败，请检查邮箱或密码。';
+                    console.error("Login error:", error);
+                });
+        });
+
+        // 注册
+        document.getElementById('signup-btn').addEventListener('click', () => {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const errorEl = document.getElementById('signup-error');
+            errorEl.textContent = '';
+            
+            createUserWithEmailAndPassword(auth, email, password)
+                .catch(error => {
+                    if (error.code === 'auth/weak-password') {
+                        errorEl.textContent = '密码太弱，至少需要6位。';
+                    } else if (error.code === 'auth/email-already-in-use') {
+                        errorEl.textContent = '该邮箱已被注册。';
+                    } else {
+                        errorEl.textContent = '注册失败，请重试。';
+                    }
+                    console.error("Signup error:", error);
+                });
+        });
+
+        // 登出
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // 切换表单
+        document.getElementById('show-signup').addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.classList.add('hidden');
+            signupForm.classList.remove('hidden');
+        });
+        document.getElementById('show-login').addEventListener('click', (e) => {
+            e.preventDefault();
+            signupForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
+
+        // --- 计时器逻辑 ---
+        const timerDisplay = document.getElementById('timer-display');
+        const currentSetEl = document.getElementById('current-set');
+        const timerStatusEl = document.getElementById('timer-status');
+        const startPauseBtn = document.getElementById('start-pause-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const skipRestBtn = document.getElementById('skip-rest-btn');
+        const timerControls = document.getElementById('timer-controls');
+        const restControls = document.getElementById('rest-controls');
+
+        const WORKOUT_SECONDS = 60;
+        const REST_SECONDS = 15;
+        const TOTAL_SETS = 4;
+
+        let timerInterval = null;
+        let currentSet = 1;
+        let timeRemaining = WORKOUT_SECONDS;
+        let isTimerRunning = false;
+        let isWorkoutPhase = true;
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function updateTimerDisplay() {
+            timerDisplay.textContent = formatTime(timeRemaining);
+        }
+
+        function startNextPhase() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+
+            if (isWorkoutPhase) {
+                if (currentSet >= TOTAL_SETS) {
+                    timerStatusEl.textContent = '训练完成！🎉';
+                    resetTimer();
+                    return;
+                }
+                isWorkoutPhase = false;
+                timeRemaining = REST_SECONDS;
+                timerStatusEl.textContent = '休息一下！';
+                timerControls.classList.add('hidden');
+                restControls.classList.remove('hidden');
+            } else {
+                isWorkoutPhase = true;
+                currentSet++;
+                currentSetEl.textContent = currentSet;
+                timeRemaining = WORKOUT_SECONDS;
+                timerStatusEl.textContent = '加油！';
+                restControls.classList.add('hidden');
+                timerControls.classList.remove('hidden');
+            }
+            
+            updateTimerDisplay();
+            timerInterval = setInterval(tick, 1000);
+        }
+
+        function tick() {
+            timeRemaining--;
+            updateTimerDisplay();
+            if (timeRemaining < 0) {
+                startNextPhase();
+            }
+        }
+
+        function handleStartPause() {
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                isTimerRunning = false;
+                startPauseBtn.textContent = '继续';
+                timerStatusEl.textContent = '已暂停';
+            } else {
+                isTimerRunning = true;
+                startPauseBtn.textContent = '暂停';
+                timerStatusEl.textContent = isWorkoutPhase ? '加油！' : '休息一下！';
+                timerInterval = setInterval(tick, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isTimerRunning = false;
+            isWorkoutPhase = true;
+            currentSet = 1;
+            timeRemaining = WORKOUT_SECONDS;
+            updateTimerDisplay();
+            currentSetEl.textContent = currentSet;
+            startPauseBtn.textContent = '开始';
+            timerStatusEl.textContent = '';
+            timerControls.classList.remove('hidden');
+            restControls.classList.add('hidden');
+        }
+
+        startPauseBtn.addEventListener('click', handleStartPause);
+        resetBtn.addEventListener('click', resetTimer);
+        skipRestBtn.addEventListener('click', () => {
+            if (!isWorkoutPhase) {
+                startNextPhase();
+            }
+        });
+        
+        // --- 数据处理逻辑 ---
         function getTodayDateString() {
             const today = new Date();
             const year = today.getFullYear();
@@ -191,26 +418,21 @@
             return `${year}-${month}-${day}`;
         }
 
-        // 渲染训练追踪器
         function renderTracker(data) {
             const trackerListEl = document.getElementById('tracker-list');
             trackerListEl.innerHTML = '';
-            
-            // 初始化状态
             workoutState = data?.setsCompleted || {};
             workouts.forEach(w => {
                 if (!workoutState[w.id]) {
                     workoutState[w.id] = 0;
                 }
             });
-
             workouts.forEach(workout => {
                 let setButtonsHTML = '';
                 for (let i = 1; i <= workout.totalSets; i++) {
                     const isCompleted = i <= (workoutState[workout.id] || 0);
                     setButtonsHTML += `<button class="set-btn ${isCompleted ? 'completed' : ''}" data-workout-id="${workout.id}" data-set-num="${i}">${i}</button>`;
                 }
-
                 const itemHTML = `
                     <div>
                         <h3 class="text-lg font-bold">${workout.name} <span class="text-sm font-normal text-gray-500">${workout.reps} ${workout.unit} / 组</span></h3>
@@ -221,26 +443,20 @@
                 `;
                 trackerListEl.innerHTML += itemHTML;
             });
-
             addSetButtonListeners();
             updateTotalProgress();
         }
         
-        // 为组按钮添加事件监听
         function addSetButtonListeners() {
             document.querySelectorAll('.set-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const workoutId = btn.dataset.workoutId;
                     const setNum = parseInt(btn.dataset.setNum);
-                    
-                    // 如果点击已完成的最后一组，则取消所有
                     if (workoutState[workoutId] === setNum && btn.classList.contains('completed')) {
                          workoutState[workoutId] = setNum - 1;
                     } else {
                         workoutState[workoutId] = setNum;
                     }
-                    
-                    // 更新UI
                     const parent = btn.parentElement;
                     parent.querySelectorAll('.set-btn').forEach(innerBtn => {
                         if (innerBtn.dataset.workoutId === workoutId) {
@@ -251,35 +467,29 @@
                             }
                         }
                     });
-                    
                     updateTotalProgress();
                 });
             });
         }
 
-        // 更新总进度条
         function updateTotalProgress() {
             const totalSets = workouts.reduce((sum, w) => sum + w.totalSets, 0);
             const completedSets = Object.values(workoutState).reduce((sum, s) => sum + s, 0);
             const percentage = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
-
             const progressBar = document.getElementById('total-progress-bar');
             progressBar.style.width = `${percentage}%`;
             progressBar.textContent = `${percentage}%`;
         }
 
-        // 加载今日数据
         async function loadTodayData() {
             const dateStr = getTodayDateString();
             const workoutDocRef = doc(db, "workouts", dateStr);
             const workoutDocSnap = await getDoc(workoutDocRef);
-            
             if (workoutDocSnap.exists()) {
                 renderTracker(workoutDocSnap.data());
             } else {
-                renderTracker(null); // 初始化空的追踪器
+                renderTracker(null);
             }
-
             const blogDocRef = doc(db, "blogPosts", dateStr);
             const blogDocSnap = await getDoc(blogDocRef);
             if (blogDocSnap.exists()) {
@@ -294,11 +504,9 @@
             }
         }
 
-        // 图片上传处理
         document.getElementById('photo-upload').addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = (e) => {
                 imageBase64 = e.target.result;
@@ -309,35 +517,23 @@
             reader.readAsDataURL(file);
         });
 
-        // 保存所有数据
         document.getElementById('save-all-button').addEventListener('click', async () => {
             const button = document.getElementById('save-all-button');
             const btnText = document.getElementById('btn-text');
             const btnSpinner = document.getElementById('btn-spinner');
             const statusEl = document.getElementById('save-status');
-
             button.disabled = true;
             btnText.classList.add('hidden');
             btnSpinner.classList.remove('hidden');
             statusEl.textContent = '';
-
             const dateStr = getTodayDateString();
             const textEntry = document.getElementById('text-entry').value;
-
             try {
-                // 1. 保存训练进度
-                const totalSets = workouts.reduce((sum, w) => sum + w.totalSets, 0);
-                const completedSets = Object.values(workoutState).reduce((sum, s) => sum + s, 0);
-                const progress = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
-                
                 const workoutData = {
                     date: dateStr,
                     setsCompleted: workoutState,
-                    progress: progress
                 };
-                await setDoc(doc(db, "workouts", dateStr), workoutData);
-
-                // 2. 如果有图片或文字，保存博客
+                await setDoc(doc(db, "workouts", dateStr), workoutData, { merge: true });
                 if (imageBase64 || textEntry) {
                     const blogData = {
                         date: dateStr,
@@ -347,10 +543,8 @@
                     };
                     await setDoc(doc(db, "blogPosts", dateStr), blogData, { merge: true });
                 }
-                
                 statusEl.textContent = '保存成功！';
                 setTimeout(() => statusEl.textContent = '', 3000);
-
             } catch (error) {
                 console.error("保存失败:", error);
                 statusEl.textContent = '保存失败，请检查网络连接。';
@@ -362,31 +556,6 @@
                 btnSpinner.classList.add('hidden');
             }
         });
-
-
-        // 密码验证逻辑
-        function checkPassword() {
-            const correctPassword = 'Aa136789@';
-            const inputPassword = document.getElementById('password-input').value;
-            const errorEl = document.getElementById('password-error');
-
-            if (inputPassword === correctPassword) {
-                document.getElementById('password-overlay').classList.add('hidden');
-                document.getElementById('main-content').classList.remove('hidden');
-                loadTodayData();
-            } else {
-                errorEl.textContent = '密码错误，请重试。';
-                document.getElementById('password-input').value = '';
-            }
-        }
-
-        document.getElementById('password-submit').addEventListener('click', checkPassword);
-        document.getElementById('password-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                checkPassword();
-            }
-        });
-
     </script>
 </body>
 </html>
