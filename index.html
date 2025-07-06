@@ -154,12 +154,13 @@
         const workouts = [
             { id: 'plank', name: '平板支撑', totalSets: 4, unit: '分钟', reps: 1 },
             { id: 'crunches', name: '摸膝卷腹', totalSets: 4, unit: '次', reps: 20 },
+            { id: 'v-crunches', name: 'V字卷腹', totalSets: 4, unit: '次', reps: 15 },
             { id: 'cycling', name: '仰卧蹬车', totalSets: 4, unit: '次', reps: 20 },
             { id: 'twists', name: '俄罗斯转体', totalSets: 4, unit: '次', reps: 18 },
             { id: 'stretch', name: '腹肌拉伸', totalSets: 1, unit: '秒', reps: 60 }
         ];
 
-        // 获取今天的日期字符串 YYYY-MM-DD
+        // 获取今天的日期字符串YYYY-MM-DD
         function getTodayDateString() {
             const today = new Date();
             const year = today.getFullYear();
@@ -241,7 +242,6 @@
             const completedDays = new Set();
             const monthStr = String(month + 1).padStart(2, '0');
             const firstDayOfMonth = `${year}-${monthStr}-01`;
-            // Get the last day of the month by getting the 0th day of the next month
             const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
             const lastDayOfMonthStr = `${year}-${monthStr}-${String(lastDayOfMonth).padStart(2, '0')}`;
 
@@ -260,9 +260,6 @@
                     }
                 });
             } catch(e) {
-                // In a real app, you might need to create a composite index in Firebase.
-                // For this example, we'll catch the error and log it.
-                // The calendar will still render, just without completion marks.
                 console.warn("Could not fetch workout completion data for calendar. You might need to create a Firebase index:", e.message);
             }
 
